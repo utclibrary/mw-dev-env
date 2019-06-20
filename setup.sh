@@ -10,9 +10,9 @@ then
 echo "MediaWiki is already installed."
 else
 echo "Installing MediaWiki ..."
-wget https://releases.wikimedia.org/mediawiki/1.32/mediawiki-1.32.0.tar.gz
+wget https://releases.wikimedia.org/mediawiki/1.32/mediawiki-1.32.2.tar.gz
 tar xf  mediawiki*.tar.gz
-mv mediawiki-1.32.0/* /var/www/html/
+mv mediawiki-1.32.2/* /var/www/html/
 fi
 echo "Installing editors ..."
 yum -y install nano vim
