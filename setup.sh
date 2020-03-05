@@ -2,25 +2,32 @@
 # Update packages
 echo "Running yum update..."
 yum -y update
-echo "Installing wget ..."
-yum -y install wget
 #install MW if not already installed
-if  [ -e /var/www/html/index.php ]
-then
-echo "MediaWiki is already installed."
-else
-echo "Installing MediaWiki ..."
-wget https://releases.wikimedia.org/mediawiki/1.32/mediawiki-1.32.2.tar.gz
-tar xf  mediawiki*.tar.gz
-mv mediawiki-1.32.2/* /var/www/html/
-fi
+# if  [ -e /var/www/html/index.php ]
+# then
+# echo "MediaWiki is already installed."
+# else
+# echo "Installing MediaWiki ..."
+# wget https://releases.wikimedia.org/mediawiki/1.32/mediawiki-1.32.2.tar.gz
+# tar xvzf  mediawiki*.tar.gz
+# mv mediawiki-1.32.2/* /var/www/html/
+# fi
 echo "Installing editors ..."
 yum -y install nano vim
 echo "Installing PHP 7 ..."
 yum -y install epel-release yum-utils
 yum -y install http://rpms.remirepo.net/enterprise/remi-release-7.rpm
 yum-config-manager --enable remi-php73
-yum -y install php php-mcrypt php-cli php-gd php-curl php-mysql php-ldap php-zip php-fileinfo php-xml php-mbstring
+yum -y install php php-mcrypt php-cli php-gd php-curl php-mysql php-ldap php-zip php-fileinfo php-xml php-mbstring uzip wget
+# echo "installing Composer and bootstrap for mediawiki" # see https://www.vultr.com/docs/install-composer-on-centos-7
+# curl -sS https://getcomposer.org/installer | php
+# mv composer.phar /usr/local/bin/composer
+# composer update --no-dev "mediawiki/bootstrap"
+# install MediaWikiBootstrap
+# echo "mediawiki/bootstrap: ~4.0" > /var/www/html/composer.local.json
+# cd /var/www/html
+# composer update --no-dev "mediawiki/bootstrap"
+# echo
 echo "Installing Apache ..."
 yum -y install httpd
 echo "Modify php.ini to show php errors"
@@ -35,7 +42,7 @@ if ! mysql -u root -e 'USE media_wiki'; then
 mysql -u root -e "CREATE database media_wiki";
 #mysql -u root LuptonDB < /vagrant/mw.sql;
 mysql -u root -e "CREATE USER 'media_wiki'@'localhost' identified by 'mw123'";
-mysql -u root -e "GRANT ALL PRIVILEGES ON media_wiki.* TO 'media_wiki'@'localhost'";
+mysql -u root -e "GRANT ALL PRIVILEGES ON media_wiki.* TO 'media_wiki'@'localhost' WITH GRANT OPTION";
 fi
 echo "Installing git ..."
 yum -y install git
