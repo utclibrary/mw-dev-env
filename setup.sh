@@ -18,11 +18,7 @@ echo "Installing PHP ..."
 yum -y install epel-release yum-utils
 yum -y install http://rpms.remirepo.net/enterprise/remi-release-7.rpm
 yum-config-manager --enable remi-php73
-<<<<<<< HEAD
-yum -y install php php-mcrypt php-cli php-gd php-curl php-mysql php-ldap php-zip php-fileinfo php-xml php-mbstring uzip
-=======
 yum -y install php php-mcrypt php-cli php-gd php-curl php-mysql php-ldap php-zip php-fileinfo php-xml php-mbstring uzip wget
->>>>>>> 3c7a8124a26409cc7c6c9199975f0497a9081382
 # echo "installing Composer and bootstrap for mediawiki" # see https://www.vultr.com/docs/install-composer-on-centos-7
 # curl -sS https://getcomposer.org/installer | php
 # mv composer.phar /usr/local/bin/composer
@@ -32,12 +28,12 @@ yum -y install php php-mcrypt php-cli php-gd php-curl php-mysql php-ldap php-zip
 # cd /var/www/html
 # composer update --no-dev "mediawiki/bootstrap"
 # echo
-<<<<<<< HEAD
 yum -y install gcc php-devel php-pear
 yum -y install ImageMagick ImageMagick-devel ImageMagick-perl
-
-=======
->>>>>>> 3c7a8124a26409cc7c6c9199975f0497a9081382
+echo "Creating default db connection file ..."
+mkdir -p /var/www/private
+echo -ne "[database]\nservername = localhost\nusername = root\npassword = \n" > config.ini
+cp config.ini /var/www/private/config.ini
 echo "Installing Apache ..."
 yum -y install httpd
 echo "Modify php.ini to show php errors"
@@ -48,16 +44,14 @@ echo "Installing MariaDB ..."
 yum -y install mariadb-server
 systemctl start mariadb
 systemctl status mariadb
+mysql -u root -e "create database Login";
+mysql -u root Login < /vagrant/Login.sql;
+mysql> GRANT ALL PRIVILEGES ON Login.* TO 'root'@'localhost';
 if ! mysql -u root -e 'USE wiki_lib'; then
 mysql -u root -e "CREATE database wiki_lib";
-#mysql -u root LuptonDB < /vagrant/mw.sql;
-<<<<<<< HEAD
+mysql -u root LuptonDB < /vagrant/wiki_lib.sql;
 mysql -u root -e "CREATE USER 'wikiadmin'@'localhost' identified by 'Fr3sh1nstall'";
 mysql -u root -e "GRANT ALL PRIVILEGES ON wiki_lib.* TO 'wikiadmin'@'localhost' WITH GRANT OPTION";
-=======
-mysql -u root -e "CREATE USER 'media_wiki'@'localhost' identified by 'mw123'";
-mysql -u root -e "GRANT ALL PRIVILEGES ON media_wiki.* TO 'media_wiki'@'localhost' WITH GRANT OPTION";
->>>>>>> 3c7a8124a26409cc7c6c9199975f0497a9081382
 fi
 mysql -u root wiki_lib < /vagrant/wiki_lib.sql;
 php /var/www/html/maintenance/update.php
@@ -73,5 +67,5 @@ yum -y install git
 #fi
 
 setenforce 0
-echo "use 192.168.33.21 OR localhost:8080"
+echo "use http://192.168.33.21 OR localhost:8080"
 echo "wikiadmin Fr3sh1nstall"
