@@ -17,7 +17,7 @@ yum -y install nano vim
 echo "Installing PHP ..."
 yum -y install epel-release yum-utils
 yum -y install http://rpms.remirepo.net/enterprise/remi-release-7.rpm
-yum-config-manager --enable remi-php73
+yum-config-manager --enable remi-php74
 yum -y install php php-mcrypt php-cli php-gd php-curl php-mysql php-ldap php-zip php-fileinfo php-xml php-mbstring uzip wget
 # echo "installing Composer and bootstrap for mediawiki" # see https://www.vultr.com/docs/install-composer-on-centos-7
 # curl -sS https://getcomposer.org/installer | php
